@@ -2,6 +2,7 @@ package com.yusufsahin.hiring_platform_api.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
