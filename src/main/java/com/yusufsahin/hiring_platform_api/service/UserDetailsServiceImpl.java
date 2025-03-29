@@ -2,6 +2,7 @@ package com.yusufsahin.hiring_platform_api.service;
 
 import com.yusufsahin.hiring_platform_api.model.User;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final AuthService authService;
 
-    public UserDetailsServiceImpl(AuthService authService) {
+    public UserDetailsServiceImpl(@Lazy AuthService authService) {
         this.authService = authService;
     }
 
