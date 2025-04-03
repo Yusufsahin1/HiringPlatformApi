@@ -1,7 +1,10 @@
 package com.yusufsahin.hiring_platform_api.service;
 
-import com.yusufsahin.hiring_platform_api.dto.UserDto;
-import com.yusufsahin.hiring_platform_api.dto.UserDtoIU;
+import com.yusufsahin.hiring_platform_api.dto.*;
+import com.yusufsahin.hiring_platform_api.dto.converter.CompanyDtoConverter;
+import com.yusufsahin.hiring_platform_api.dto.converter.JobSeekerDtoConverter;
+import com.yusufsahin.hiring_platform_api.model.Company;
+import com.yusufsahin.hiring_platform_api.model.JobSeeker;
 import com.yusufsahin.hiring_platform_api.model.User;
 import com.yusufsahin.hiring_platform_api.repository.UserRepository;
 import com.yusufsahin.hiring_platform_api.security.JwtUtil;
@@ -12,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
@@ -36,17 +40,32 @@ public class AuthService {
         return userRepository.findByEmail(email);
     }
 
-    public User Register(UserDtoIU request) {
+    @Transactional
+    public CompanyDto registerCompany(CompanyDtoIU request) {
 
-        User newUser = new User();
-        newUser.setEmail(request.email());
-        newUser.setPassword(passwordEncoder.encode(request.password()));
-        newUser.setRole(request.role());
+        Company newCompany = new Company();
+        newCompany.setEmail(request.email());
+        newCompany.setPassword(passwordEncoder.encode(request.password()));
+        newCompany.setRole(request.role()); // COMPANY
+        newCompany.setCompanyName(request.companyName());
 
-        return userRepository.save(newUser);
+        return CompanyDtoConverter.toDto(userRepository.save(newCompany));
     }
 
-    public String Login(@RequestBody UserDto request) {
+    public JobSeekerDto registerJobSeeker(JobSeekerDtoIU request) {
+
+        JobSeeker newJobSeeker = new JobSeeker();
+        newJobSeeker.setEmail(request.email());
+        newJobSeeker.setPassword(passwordEncoder.encode(request.password()));
+        newJobSeeker.setRole(request.role()); // JOB_SEEKER
+        newJobSeeker.setName(request.name());
+        newJobSeeker.setSurname(request.surname());
+        newJobSeeker.setResumeUrl(request.resumeUrl());
+
+        return JobSeekerDtoConverter.toDto(userRepository.save(newJobSeeker));
+    }
+
+    public String login(@RequestBody UserDto request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),
                 request.password()));
 

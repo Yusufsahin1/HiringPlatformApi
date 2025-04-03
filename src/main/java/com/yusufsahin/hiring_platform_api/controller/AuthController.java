@@ -1,9 +1,7 @@
 package com.yusufsahin.hiring_platform_api.controller;
 
 
-import com.yusufsahin.hiring_platform_api.dto.UserDto;
-import com.yusufsahin.hiring_platform_api.dto.UserDtoIU;
-import com.yusufsahin.hiring_platform_api.model.User;
+import com.yusufsahin.hiring_platform_api.dto.*;
 import com.yusufsahin.hiring_platform_api.service.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +18,18 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
-    public User register(@RequestBody UserDtoIU request) {
-        return authService.Register(request);
+    @PostMapping("/register-company")
+    public CompanyDto registerCompany(@RequestBody CompanyDtoIU request) {
+        return authService.registerCompany(request);
+    }
+
+    @PostMapping("/register-jobseeker")
+    public JobSeekerDto registerJobSeeker(@RequestBody JobSeekerDtoIU request) {
+        return authService.registerJobSeeker(request);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserDto request) {
-        return authService.Login(request);
+        return authService.login(request);
     }
 }
