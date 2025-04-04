@@ -1,9 +1,12 @@
 package com.yusufsahin.hiring_platform_api.security;
 
 
+import com.yusufsahin.hiring_platform_api.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,8 +22,11 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, JwtUtil jwtUtil) {
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -28,9 +34,15 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
-                        x.anyRequest().permitAll()
+                        x
+                                .requestMatchers("/api/v1/auth/welcome").authenticated() // Sadece kimliği doğrulanmış kullanıcılar erişebilir
+                                .requestMatchers("/api/v1/auth/register-company").permitAll() //herkes erişebilir
+                                .requestMatchers("/api/v1/auth/register-jobseeker").permitAll() //herkes erişebilir
+                                .requestMatchers("/api/v1/auth/login").permitAll() //herkes erişebilir
+                                .anyRequest().authenticated() // Diğer tüm istekler için kimlik doğrulama gereklidir
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -43,6 +55,14 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
     }
 
 }

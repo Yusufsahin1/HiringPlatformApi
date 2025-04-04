@@ -3,10 +3,7 @@ package com.yusufsahin.hiring_platform_api.controller;
 
 import com.yusufsahin.hiring_platform_api.dto.*;
 import com.yusufsahin.hiring_platform_api.service.AuthService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,7 +26,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserDto request) {
+    public String login(@RequestBody AuthRequest request) {
         return authService.login(request);
+    }
+
+    @GetMapping("/welcome") // TEST
+    public String welcome() {
+        return "Hello World!";
     }
 }
