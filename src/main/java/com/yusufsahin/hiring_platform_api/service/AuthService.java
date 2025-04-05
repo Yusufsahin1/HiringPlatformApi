@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -39,7 +38,6 @@ public class AuthService {
         return userRepository.findByEmail(email);
     }
 
-    @Transactional
     public CompanyDto registerCompany(CompanyDtoIU request) {
 
         Company newCompany = new Company();
