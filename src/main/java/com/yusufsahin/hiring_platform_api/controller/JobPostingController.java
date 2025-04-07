@@ -3,10 +3,9 @@ package com.yusufsahin.hiring_platform_api.controller;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDto;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDtoIU;
 import com.yusufsahin.hiring_platform_api.service.JobPostingService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/v1/job")
 @RestController
@@ -22,4 +21,25 @@ public class JobPostingController {
     public JobPostingDto createJobPosting(@RequestBody JobPostingDtoIU request) {
         return jobPostingService.createJobPosting(request);
     }
+
+    @PutMapping("/update/{id}")
+    public JobPostingDto updateJobPosting(@RequestBody JobPostingDtoIU request, @PathVariable Long id) {
+        return jobPostingService.updateJobPosting(id, request);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteJobPosting(@PathVariable Long id) {
+        jobPostingService.deleteJobPosting(id);
+    }
+
+    @GetMapping
+    public List<JobPostingDto> getAllJobPostings() {
+        return jobPostingService.getAllJobPostings();
+    }
+
+    @GetMapping("/{id}")
+    public JobPostingDto getJobPostingById(@PathVariable Long id) {
+        return jobPostingService.getJobPostingById(id);
+    }
+
 }

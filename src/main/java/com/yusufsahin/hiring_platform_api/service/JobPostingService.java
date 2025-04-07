@@ -11,7 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class JobPostingService {
@@ -25,6 +28,7 @@ public class JobPostingService {
     }
 
     private Company getCurrentCompany() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new IllegalStateException("User is not authenticated.");
@@ -38,8 +42,8 @@ public class JobPostingService {
         return (Company) user;
     }
 
-    @Transactional
     public JobPostingDto createJobPosting(JobPostingDtoIU request) {
+
         Company company = getCurrentCompany();
 
         JobPosting jobPosting = new JobPosting();
@@ -50,5 +54,55 @@ public class JobPostingService {
 
         return JobPostingDtoConverter.toDto(jobPostingRepository.save(jobPosting));
     }
+
+    public JobPostingDto updateJobPosting(Long id, JobPostingDtoIU request) {
+
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Job posting not found."));
+
+        if (!Objects.equals(jobPosting.getCompany().getId(), getCurrentCompany().getId())) {
+            throw new IllegalStateException("You are not the owner of this job posting.");
+        }
+
+        if (request.title() != null)
+            jobPosting.setTitle(request.title());
+
+        if (request.description() != null)
+            jobPosting.setDescription(request.description());
+
+        if (request.location() != null)
+            jobPosting.setLocation(request.location());
+
+        return JobPostingDtoConverter.toDto(jobPostingRepository.save(jobPosting));
+    }
+
+    public void deleteJobPosting(Long id) {
+
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Job posting not found."));
+
+        if (!Objects.equals(jobPosting.getCompany().getId(), getCurrentCompany().getId())) {
+            throw new IllegalStateException("You are not the owner of this job posting.");
+        }
+
+        jobPostingRepository.delete(jobPosting);
+    }
+
+    public List<JobPostingDto> getAllJobPostings() {
+        List<JobPosting> jobPostings = jobPostingRepository.findAll();
+        List<JobPostingDto> dtoJobPostings = new ArrayList<>();
+
+        for (JobPosting jobPosting : jobPostings) {
+            dtoJobPostings.add(JobPostingDtoConverter.toDto(jobPosting));
+        }
+
+        return dtoJobPostings;
+    }
+
+    public JobPostingDto getJobPostingById(Long id) {
+        return JobPostingDtoConverter.toDto(jobPostingRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Job posting not found.")));
+    }
+
 }
 
