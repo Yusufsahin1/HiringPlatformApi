@@ -89,6 +89,7 @@ public class JobPostingService {
     }
 
     public List<JobPostingDto> getAllJobPostings() {
+
         List<JobPosting> jobPostings = jobPostingRepository.findAll();
         List<JobPostingDto> dtoJobPostings = new ArrayList<>();
 
@@ -102,6 +103,32 @@ public class JobPostingService {
     public JobPostingDto getJobPostingById(Long id) {
         return JobPostingDtoConverter.toDto(jobPostingRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Job posting not found.")));
+    }
+
+    public List<JobPostingDto> getMyJobPostings() {
+
+        Company company = getCurrentCompany();
+
+        List<JobPosting> jobPostings = jobPostingRepository.findByCompany(company);
+        List<JobPostingDto> dtoJobPostings = new ArrayList<>();
+
+        for (JobPosting jobPosting : jobPostings) {
+            dtoJobPostings.add(JobPostingDtoConverter.toDto(jobPosting));
+        }
+
+        return dtoJobPostings;
+    }
+
+    public List<JobPostingDto> getJobPostingsByCompany(Long companyId) {
+
+        List<JobPosting> jobPostings = jobPostingRepository.findByCompanyId(companyId);
+        List<JobPostingDto> dtoJobPostings = new ArrayList<>();
+
+        for (JobPosting jobPosting : jobPostings) {
+            dtoJobPostings.add(JobPostingDtoConverter.toDto(jobPosting));
+        }
+
+        return dtoJobPostings;
     }
 
 }

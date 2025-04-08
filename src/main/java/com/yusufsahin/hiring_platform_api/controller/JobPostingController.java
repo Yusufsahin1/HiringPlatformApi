@@ -42,4 +42,16 @@ public class JobPostingController {
         return jobPostingService.getJobPostingById(id);
     }
 
+    @GetMapping("/my-postings")
+    public List<JobPostingDto> getMyJobPostings() {
+        return jobPostingService.getMyJobPostings();
+    }
+
+    @GetMapping("/company/{companyId}")
+    public List<JobPostingDto> getJobPostingsByCompany(@PathVariable Long companyId) {
+        return jobPostingService.getJobPostingsByCompany(companyId);
+
+    }
+
+
 }
