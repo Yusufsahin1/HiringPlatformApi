@@ -27,7 +27,7 @@ public class JobPostingService {
         this.authService = authService;
     }
 
-    private Company getCurrentCompany() {
+    protected Company getCurrentCompany() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

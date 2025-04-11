@@ -11,7 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "job_applications")
+@Table(name = "job_applications",uniqueConstraints = @UniqueConstraint(columnNames = {"job_seeker_id", "job_posting_id"}))
 public class JobApplication {
 
     @Id
@@ -20,22 +20,11 @@ public class JobApplication {
     private String coverLetter;
 
     @ManyToOne
-    @JoinColumn(name = "job_seeker_id")
+    @JoinColumn(name = "job_seeker_id", nullable = false)
     private JobSeeker jobSeeker;
 
     @ManyToOne
-    @JoinColumn(name = "job_posting_id")
+    @JoinColumn(name = "job_posting_id", nullable = false)
     private JobPosting jobPosting;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        JobApplication that = (JobApplication) o;
-        return Objects.equals(id, that.id) && Objects.equals(coverLetter, that.coverLetter) && Objects.equals(jobSeeker, that.jobSeeker) && Objects.equals(jobPosting, that.jobPosting);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, coverLetter, jobSeeker, jobPosting);
-    }
 }
