@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,14 +63,18 @@ public class AuthService {
     }
 
     public String login(AuthRequest request) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),
-                request.password()));
 
-        if (authentication.isAuthenticated()) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+            log.info("User logged in successfully: {}", request.email());
             return jwtUtil.generateToken(request.email());
-        }
 
-        log.info("invalid email {}", request.email());
-        throw new UsernameNotFoundException("invalid email {} " + request.email());
+        } catch (AuthenticationException e) {
+            log.warn("Authentication failed for user {}: {}", request.email(), e.getMessage());
+            throw e;
+        }
     }
+
 }

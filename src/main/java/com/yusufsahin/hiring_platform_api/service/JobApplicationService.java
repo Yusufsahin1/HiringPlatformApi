@@ -2,14 +2,15 @@ package com.yusufsahin.hiring_platform_api.service;
 
 import com.yusufsahin.hiring_platform_api.dto.JobApplicationDto;
 import com.yusufsahin.hiring_platform_api.dto.JobApplicationDtoIU;
-import com.yusufsahin.hiring_platform_api.dto.JobPostingDto;
 import com.yusufsahin.hiring_platform_api.dto.converter.JobApplicationDtoConverter;
 import com.yusufsahin.hiring_platform_api.dto.converter.JobPostingDtoConverter;
 import com.yusufsahin.hiring_platform_api.model.*;
 import com.yusufsahin.hiring_platform_api.repository.JobApplicationRepository;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -34,13 +35,13 @@ public class JobApplicationService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is not authenticated.");
+            throw new AuthenticationCredentialsNotFoundException("User is not authenticated.");
         }
 
         String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
 
         User user = authService.getByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
         return (JobSeeker) user;
     }
@@ -73,7 +74,7 @@ public class JobApplicationService {
     }
 
     public List<JobApplicationDto> getApplicationsForJobPosting(Long jobPostingId) throws AccessDeniedException {
-        // Optional: Verify the job posting exists first
+
         JobPosting jobPosting = JobPostingDtoConverter.toEntity(jobPostingService.getJobPostingById(jobPostingId));
 
         Company currentCompany = jobPostingService.getCurrentCompany();
@@ -87,7 +88,6 @@ public class JobApplicationService {
                 .map(JobApplicationDtoConverter::toDto)
                 .collect(Collectors.toList());
     }
-
 
 }
 

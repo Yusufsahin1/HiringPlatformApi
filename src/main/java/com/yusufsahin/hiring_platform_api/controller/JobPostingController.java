@@ -3,6 +3,7 @@ package com.yusufsahin.hiring_platform_api.controller;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDto;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDtoIU;
 import com.yusufsahin.hiring_platform_api.service.JobPostingService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class JobPostingController {
     }
 
     @PostMapping("/create")
-    public JobPostingDto createJobPosting(@RequestBody JobPostingDtoIU request) {
+    public JobPostingDto createJobPosting(@Valid @RequestBody JobPostingDtoIU request) {
         return jobPostingService.createJobPosting(request);
     }
 

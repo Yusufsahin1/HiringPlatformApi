@@ -7,9 +7,13 @@ import com.yusufsahin.hiring_platform_api.model.Company;
 import com.yusufsahin.hiring_platform_api.model.JobPosting;
 import com.yusufsahin.hiring_platform_api.model.User;
 import com.yusufsahin.hiring_platform_api.repository.JobPostingRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,13 +35,13 @@ public class JobPostingService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is not authenticated.");
+            throw new AuthenticationCredentialsNotFoundException("User is not authenticated.");
         }
 
         String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
 
         User user = authService.getByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException("Authenticated user not found in database: " + userEmail));
 
         return (Company) user;
     }
@@ -58,19 +62,19 @@ public class JobPostingService {
     public JobPostingDto updateJobPosting(Long id, JobPostingDtoIU request) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Job posting not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Job posting not found."));
 
         if (!Objects.equals(jobPosting.getCompany().getId(), getCurrentCompany().getId())) {
-            throw new IllegalStateException("You are not the owner of this job posting.");
+            throw new AccessDeniedException("You are not the owner of this job posting.");
         }
 
-        if (request.title() != null)
+        if (request.title() != null && !request.title().isBlank())
             jobPosting.setTitle(request.title());
 
-        if (request.description() != null)
+        if (request.description() != null && !request.description().isBlank())
             jobPosting.setDescription(request.description());
 
-        if (request.location() != null)
+        if (request.location() != null && !request.location().isBlank())
             jobPosting.setLocation(request.location());
 
         return JobPostingDtoConverter.toDto(jobPostingRepository.save(jobPosting));
@@ -79,10 +83,10 @@ public class JobPostingService {
     public void deleteJobPosting(Long id) {
 
         JobPosting jobPosting = jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Job posting not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Job posting not found."));
 
         if (!Objects.equals(jobPosting.getCompany().getId(), getCurrentCompany().getId())) {
-            throw new IllegalStateException("You are not the owner of this job posting.");
+            throw new AccessDeniedException("You are not the owner of this job posting.");
         }
 
         jobPostingRepository.delete(jobPosting);
@@ -102,7 +106,7 @@ public class JobPostingService {
 
     public JobPostingDto getJobPostingById(Long id) {
         return JobPostingDtoConverter.toDto(jobPostingRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Job posting not found.")));
+                .orElseThrow(() -> new EntityNotFoundException("Job posting not found.")));
     }
 
     public List<JobPostingDto> getMyJobPostings() {
@@ -132,4 +136,3 @@ public class JobPostingService {
     }
 
 }
-

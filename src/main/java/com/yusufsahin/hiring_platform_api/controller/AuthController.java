@@ -3,6 +3,7 @@ package com.yusufsahin.hiring_platform_api.controller;
 
 import com.yusufsahin.hiring_platform_api.dto.*;
 import com.yusufsahin.hiring_platform_api.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,12 +17,12 @@ public class AuthController {
     }
 
     @PostMapping("/register-company")
-    public CompanyDto registerCompany(@RequestBody CompanyDtoIU request) {
+    public CompanyDto registerCompany(@Valid @RequestBody CompanyDtoIU request) {
         return authService.registerCompany(request);
     }
 
     @PostMapping("/register-jobseeker")
-    public JobSeekerDto registerJobSeeker(@RequestBody JobSeekerDtoIU request) {
+    public JobSeekerDto registerJobSeeker(@Valid @RequestBody JobSeekerDtoIU request) {
         return authService.registerJobSeeker(request);
     }
 
@@ -30,8 +31,4 @@ public class AuthController {
         return authService.login(request);
     }
 
-    @GetMapping("/welcome") // TEST
-    public String welcome() {
-        return "Hello World!";
-    }
 }
