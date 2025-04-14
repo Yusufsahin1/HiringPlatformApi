@@ -6,6 +6,7 @@ import com.yusufsahin.hiring_platform_api.dto.converter.JobSeekerDtoConverter;
 import com.yusufsahin.hiring_platform_api.model.Company;
 import com.yusufsahin.hiring_platform_api.model.JobSeeker;
 import com.yusufsahin.hiring_platform_api.model.User;
+import com.yusufsahin.hiring_platform_api.model.UserRole;
 import com.yusufsahin.hiring_platform_api.repository.UserRepository;
 import com.yusufsahin.hiring_platform_api.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<User> getByEmail(String email) { // Dto döndürecek şekilde düzenlenecek ya da silinecek
+    public Optional<User> getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -43,7 +44,7 @@ public class AuthService {
         Company newCompany = new Company();
         newCompany.setEmail(request.email());
         newCompany.setPassword(passwordEncoder.encode(request.password()));
-        newCompany.setRole(request.role()); // COMPANY
+        newCompany.setRole(UserRole.COMPANY);
         newCompany.setCompanyName(request.companyName());
 
         return CompanyDtoConverter.toDto(userRepository.save(newCompany));
@@ -54,7 +55,7 @@ public class AuthService {
         JobSeeker newJobSeeker = new JobSeeker();
         newJobSeeker.setEmail(request.email());
         newJobSeeker.setPassword(passwordEncoder.encode(request.password()));
-        newJobSeeker.setRole(request.role()); // JOB_SEEKER
+        newJobSeeker.setRole(UserRole.JOB_SEEKER);
         newJobSeeker.setName(request.name());
         newJobSeeker.setSurname(request.surname());
         newJobSeeker.setResumeUrl(request.resumeUrl());

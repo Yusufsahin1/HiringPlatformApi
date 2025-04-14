@@ -1,6 +1,6 @@
 package com.yusufsahin.hiring_platform_api.security;
 
-
+import com.yusufsahin.hiring_platform_api.model.UserRole;
 import com.yusufsahin.hiring_platform_api.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,11 +35,22 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
                         x
-                                .requestMatchers("/api/v1/auth/welcome").authenticated() // Sadece kimliği doğrulanmış kullanıcılar erişebilir
-                                .requestMatchers("/api/v1/auth/register-company").permitAll() //herkes erişebilir
-                                .requestMatchers("/api/v1/auth/register-jobseeker").permitAll() //herkes erişebilir
-                                .requestMatchers("/api/v1/auth/login").permitAll() //herkes erişebilir
-                                .anyRequest().authenticated() // Diğer tüm istekler için kimlik doğrulama gereklidir
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+
+                                .requestMatchers("/api/v1/job/create").hasAuthority(UserRole.COMPANY.name())
+                                .requestMatchers("/api/v1/job/update/**").hasAuthority(UserRole.COMPANY.name())
+                                .requestMatchers("/api/v1/job/delete/**").hasAuthority(UserRole.COMPANY.name())
+                                .requestMatchers("/api/v1/job/my-postings").hasAuthority(UserRole.COMPANY.name())
+                                .requestMatchers("/api/v1/job").permitAll()
+                                .requestMatchers("/api/v1/job/{id}").permitAll()
+                                .requestMatchers("/api/v1/job/company/**").permitAll()
+
+                                .requestMatchers("/api/v1/job-application/apply/**").hasAuthority(UserRole.JOB_SEEKER.name())
+                                .requestMatchers("/api/v1/job-application/my-applications").hasAuthority(UserRole.JOB_SEEKER.name())
+                                .requestMatchers("/api/v1/job-application/{jobPostingId}").hasAuthority(UserRole.COMPANY.name())
+                                .requestMatchers("/api/v1/job-application/**").authenticated()
+
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

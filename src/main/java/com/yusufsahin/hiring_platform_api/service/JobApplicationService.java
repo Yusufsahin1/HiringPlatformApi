@@ -6,6 +6,7 @@ import com.yusufsahin.hiring_platform_api.dto.converter.JobApplicationDtoConvert
 import com.yusufsahin.hiring_platform_api.dto.converter.JobPostingDtoConverter;
 import com.yusufsahin.hiring_platform_api.model.*;
 import com.yusufsahin.hiring_platform_api.repository.JobApplicationRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,4 +90,3 @@ public class JobApplicationService {
     }
 
 }
-
