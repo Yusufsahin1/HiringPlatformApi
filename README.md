@@ -61,8 +61,8 @@ src/main/java/com/yusufsahin/hiring_platform_api/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/hiring-platform-api.git
-   cd hiring-platform-api
+   git clone https://github.com/Yusufsahin1/HiringPlatformApi.git
+   cd HiringPlatformApi
    ```
 
 2. **Configure environment variables**
