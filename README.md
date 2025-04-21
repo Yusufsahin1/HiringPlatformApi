@@ -71,9 +71,10 @@ src/main/java/com/yusufsahin/hiring_platform_api/
    Create a `.env` file in the root directory with the following variables:
    ```
    DB_URL=jdbc:postgresql://localhost:5432/your_database_name
+   DB_SCHEMA=your_schema_name
    DB_USERNAME=your_username
    DB_PASSWORD=your_password
-   JWT_SECRET=your_jwt_secret_key
+   SECRET_KEY=your_jwt_secret_key
    ```
 
 3. **Build the application**
