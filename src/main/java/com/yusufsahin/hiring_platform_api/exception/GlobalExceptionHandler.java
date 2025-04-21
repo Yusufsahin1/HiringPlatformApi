@@ -84,6 +84,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (errors != null && !errors.isEmpty()) {
             body.put("errors", errors);
         }
-            return new ResponseEntity<>(body, status);
+        return new ResponseEntity<>(body, status);
     }
 }

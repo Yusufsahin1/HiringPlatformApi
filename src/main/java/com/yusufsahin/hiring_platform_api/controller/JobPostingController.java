@@ -3,6 +3,7 @@ package com.yusufsahin.hiring_platform_api.controller;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDto;
 import com.yusufsahin.hiring_platform_api.dto.JobPostingDtoIU;
 import com.yusufsahin.hiring_platform_api.service.JobPostingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/job")
 @RestController
+@Tag(name = "Job Postings")
 public class JobPostingController {
 
     private final JobPostingService jobPostingService;

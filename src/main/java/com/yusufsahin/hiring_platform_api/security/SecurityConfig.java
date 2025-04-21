@@ -50,7 +50,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/job-application/{jobPostingId}").hasAuthority(UserRole.COMPANY.name())
                                 .requestMatchers("/api/v1/job-application/**").authenticated()
 
-                                .anyRequest().authenticated()
+                                //.anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
