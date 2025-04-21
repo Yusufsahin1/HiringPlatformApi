@@ -10,30 +10,31 @@ Hiring Platform API is a comprehensive backend solution designed to facilitate t
   - Secure JWT-based authentication
   - Role-based access control (Company, Job Seeker)
   
-- **Company Management**
-  - Company profile creation and management
-  - Job posting creation, updating, and deletion
+- **Company Features**
+  - Company profile registration.
+  - Job posting creation, updating, and deletion.
+  - Viewing applications submitted for their job postings.
   
 - **Job Seeker Features**
-  - Profile management
-  - Job application submission
-  - Application tracking
-  
+  - Job seeker profile registration.
+  - Submitting job applications with an optional cover letter.
+  - Viewing their own submitted applications.
+
 - **Job Posting Management**
-  - Create and manage job listings
-  - Search and filter job postings
-  - Company-specific job listing views
+  - Publicly accessible listing of all job postings.
+  - Retrieval of job postings by ID or by company.
 
 ## 🛠️ Technologies
 
 - **Java 21**
-- **Spring Boot 3.4.3**
+- **Spring Boot 3.3.10**
 - **Spring Security** with JWT authentication
 - **Spring Data JPA**
 - **PostgreSQL** database
 - **Lombok** for reducing boilerplate code
 - **Maven** for dependency management
-- **Environment Variables** management with spring-dotenv
+- **spring-dotenv** for environment variable management
+- **SpringDoc OpenAPI (Swagger UI)** for API documentation
 
 ## 📦 Project Structure
 
@@ -122,4 +123,4 @@ The API uses JWT (JSON Web Token) for authentication. To access protected endpoi
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
