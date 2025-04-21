@@ -88,11 +88,14 @@ src/main/java/com/yusufsahin/hiring_platform_api/
    
    The API will be available at `http://localhost:8080`
 
+   Access the API documentation at `http://localhost:8080/swagger-ui/index.html`
+
 ## 🔌 API Endpoints
 
 ### Authentication
 
-- `POST /api/v1/auth/register` - Register a new user (company or job seeker)
+- `POST /api/v1/auth/register-company` - Register a new user (company role)
+- `POST /api/v1/auth/register-jobseeker` - Register a new user (job seeker role)
 - `POST /api/v1/auth/login` - Authenticate and receive JWT token
 
 ### Job Postings
