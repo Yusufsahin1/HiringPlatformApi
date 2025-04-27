@@ -1,5 +1,7 @@
 # Hiring Platform API
 
+![Architecture Diagram](diagram.png)
+
 ## 📋 Overview
 
 Hiring Platform API is a comprehensive backend solution designed to facilitate the hiring process between companies and job seekers. Built with Spring Boot, this RESTful API provides a secure and efficient platform for job posting, application management, and user authentication.
@@ -9,12 +11,12 @@ Hiring Platform API is a comprehensive backend solution designed to facilitate t
 - **User Authentication & Authorization**
   - Secure JWT-based authentication
   - Role-based access control (Company, Job Seeker)
-  
+
 - **Company Features**
   - Company profile registration.
   - Job posting creation, updating, and deletion.
   - Viewing applications submitted for their job postings.
-  
+
 - **Job Seeker Features**
   - Job seeker profile registration.
   - Submitting job applications with an optional cover letter.
@@ -52,46 +54,84 @@ src/main/java/com/yusufsahin/hiring_platform_api/
 
 ## 🔧 Setup & Installation
 
-### Prerequisites
+You can run the project in two ways: **Manual (Maven)** or **Docker**. Choose the method that fits your environment.
 
-- Java 21 or higher
-- Maven
-- PostgreSQL database
+---
 
-### Installation Steps
+### ▶️ Manual Setup (Maven)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Yusufsahin1/HiringPlatformApi.git
-   cd HiringPlatformApi
-   ```
+#### Prerequisites
+- Java 21 or higher installed
+- Maven installed
+- PostgreSQL server running
 
-2. **Configure environment variables**
+#### Steps
+1. **Clone the Repository**
+    ```bash
+    git clone https://github.com/Yusufsahin1/HiringPlatformApi.git
+    cd HiringPlatformApi
+    ```
+2. **Configure Environment Variables**
+    Create a `.env` file in the project root with:
+    ```env
+    DB_URL=jdbc:postgresql://localhost:5432/postgres
+    DB_SCHEMA=hiring_platform
+    DB_USERNAME=your_db_username
+    DB_PASSWORD=your_db_password
+    SECRET_KEY=your_jwt_secret_key
+    ```
    
-   Create a `.env` file in the root directory with the following variables:
-   ```
-   DB_URL=jdbc:postgresql://localhost:5432/your_database_name
-   DB_SCHEMA=your_schema_name
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
-   SECRET_KEY=your_jwt_secret_key
-   ```
+3. **Build and Run**
+    ```bash
+    mvn clean install
+    mvn spring-boot:run
+    ```
 
-3. **Build the application**
-   ```bash
-   mvn clean install
-   ```
+---
 
-4. **Run the application**
-   ```bash
-   mvn spring-boot:run
-   ```
-   
-   The API will be available at `http://localhost:8080`
+### ▶️ Docker Setup
 
-   Access the API documentation at `http://localhost:8080/swagger-ui/index.html`
+#### Prerequisites
+- Docker (and optionally Docker Compose) installed
 
-## 🔌 API Endpoints
+#### Steps
+1. **Clone the Repository**
+    ```bash
+    git clone https://github.com/Yusufsahin1/HiringPlatformApi.git
+    cd HiringPlatformApi
+    ```
+2. **Configure Environment Variables**
+
+    Create a `.env` file in the project root as above.
+
+
+3. **Build and Run with Docker**
+    ```bash
+    docker build -t hiring-platform-api .
+    docker run -p 8080:8080 --env-file .env hiring-platform-api
+    ```
+   **Or with Docker Compose:**
+    ```bash
+    docker-compose up -d
+    docker-compose down # To stop
+    ```
+
+---
+
+### API and Documentation
+- API endpoints are available under `/api/v1/` (e.g. `http://localhost:8080/api/v1/job`)
+- Access the API documentation at `http://localhost:8080/swagger-ui/index.html`
+
+After setup, you can test the API endpoints using the example above or explore all endpoints via Swagger UI.
+
+## 🔌 API Documentation & Endpoints
+
+The API documentation is automatically generated using Swagger UI and available at:
+`http://localhost:8080/swagger-ui/index.html`
+
+You can explore and test all endpoints interactively through this interface.
+
+![Swagger UI](swaggerui.png)
 
 ### Authentication
 
